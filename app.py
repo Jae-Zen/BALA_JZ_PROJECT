@@ -19,9 +19,9 @@ def intruder():
         "text": "intruder detected"
     }
 
-    r = requests.post(url, data=payload)
+    r = requests.post(url, json=payload)
 
-    if r.status_code == 200:
-        return {"status": "sent"}, 200
-    else:
-        return {"status": "error", "details": r.json()}, 500
+    print("Status code:", r.status_code)
+    print("Response text:", r.text)
+
+    return {"telegram_status": r.status_code, "response": r.text}, 200
