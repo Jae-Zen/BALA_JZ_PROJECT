@@ -12,6 +12,10 @@ CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 
 @app.route("/intruders", methods=["POST"])
 def intruder():
+
+    data = request.get_json()
+    print("data received from ESP: ", data)
+    
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
     payload = {
