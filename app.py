@@ -13,6 +13,9 @@ CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 @app.route("/intruders", methods=["POST"])
 def intruder():
 
+    if not BOT_TOKEN or not CHAT_ID:
+        return {"status": "error", "details": "bot token or chat_id not found"}, 500
+
     data = request.get_json()
     if not data or "message" not in data:
         print("returning 400: no message")
@@ -27,9 +30,12 @@ def intruder():
         "text": "intruder detected"
     }
 
-    r = requests.post(url, json=payload)
+    r = requests.post(url, json=payload, timeout=5)
 
     print("Status code:", r.status_code)
     print("Response text:", r.text)
 
-    return {"telegram_status": r.status_code, "response": r.text}, 200
+    if r.status_code != 200:
+        return {"telegram_status": r.status_code}, 500
+    else:
+        return {"telegram_status": r.status_code, "response": r.text}, 200
