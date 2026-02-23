@@ -14,8 +14,12 @@ CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
 def intruder():
 
     data = request.get_json()
-    print("data received from ESP: ", data)
-    
+    if not data or "message" not in data:
+        print("returning 400: no message")
+        return {"status": "error", "details": "no message"}, 400
+    else:
+        print("data received from ESP: ", data)
+
     url = f"https://api.telegram.org/bot{BOT_TOKEN}/sendMessage"
 
     payload = {
